@@ -1,0 +1,39 @@
+package main
+import(
+"math"
+"gonum.org/v1/plot"
+"gonum.org/v1/plot/plotutil"
+"gonum.org/v1/plot/plotter"
+"gonume.org/v1/plot/vg"
+)
+
+func main(){
+//amostragem de um sinal senoidal
+freq := 100.0
+amplitude := 1.0
+pahse := 0.0
+sampleRate := 500.0
+//criação do slide de pontos do gráfico
+nPoints := int(50 * freq)
+points := make(plotter.XYs, nPoints)
+for i := range points{
+t := float64(i)/SampleRate
+y := amplitude * math.Sin(2* math.Pi * freq * t+phase)
+points[i].X = t
+points[i].Y = y
+}
+
+//Criação do gráfico e adição dos pontos
+p := plot.New()
+p.Title.Text = "Amostragem de um sinal senoidal"
+p.X.Label.Text = "Tempo (s)"
+p.Y.Label.Text = "Amplitude"
+err := plotutil.AddLinePoints(p, points)
+if err != nil{
+  panic(err)
+}
+
+if err := p.Save(10 * vg.Inch, 10*vg.Inch, "amostragem.png"); err != nil{
+  panic(err)
+  }
+}
